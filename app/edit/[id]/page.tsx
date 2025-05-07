@@ -3,36 +3,40 @@
 import React, { useState } from "react";
 import { useData } from "@/app/_component/DataProvider";
 
-const Edit = ({ params }: { params: { id: number } }) => {
-    const { id } = params; // remove Promise from params, Netlify can't handle that
-    const { state, dispatch } = useData();
+type PageProps = {
+  params: {
+    id: string;
+  };
+};
 
-    const student = state.students[id];
+const Edit = ({ params }: PageProps) => {
+  const id = parseInt(params.id); // Convert string to number
+  const { state, dispatch } = useData();
 
-    const [data, setData] = useState(student || { name: "", age: 0, email: "" });
+  if (!state.students[id]) {
+    return <p>No record for edit</p>;
+  }
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setData({ ...data, [e.target.name]: e.target.value });
-    }
+  const [data, setData] = useState(state.students[id]);
 
-    const handleUpdate = () => {
-        dispatch({ type: 'update', payload: { index: id, data: data } });
-        console.log("Data has been updated");
-    }
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setData({ ...data, [e.target.name]: e.target.value });
+  };
 
-    if (!student) {
-        return <p>No record for edit</p>;
-    }
+  const handleUpdate = () => {
+    dispatch({ type: 'update', payload: { index: id, data: data } });
+    console.log("Data has been updated");
+  };
 
-    return (
-        <>
-            <h2>Edit Record of having id = {id}</h2>
-            Name : <input type="text" name="name" value={data.name} onChange={handleChange} /><br />
-            Age : <input type="number" name="age" value={data.age} onChange={handleChange} /><br />
-            Email : <input type="email" name="email" value={data.email} onChange={handleChange} /><br />
-            <input type="button" value="Update" onClick={handleUpdate} />
-        </>
-    );
-}
+  return (
+    <>
+      <h2>Edit Record of having id={id}</h2>
+      Name: <input type="text" name="name" value={data.name} onChange={handleChange} /><br />
+      Age: <input type="number" name="age" value={data.age} onChange={handleChange} /><br />
+      Email: <input type="email" name="email" value={data.email} onChange={handleChange} /><br />
+      <input type="button" value="Update" onClick={handleUpdate} />
+    </>
+  );
+};
 
 export default Edit;
