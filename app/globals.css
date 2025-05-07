@@ -1,0 +1,12 @@
+.box
+{
+    width: 350px;
+    border-radius: 25px;
+    font-size: 25px;
+    padding:25px;
+    border:solid 1px gray;
+    margin:25px;
+    box-shadow: 0 5px 2px rgb(244, 0, 0);
+    text-align: center;
+    display: inline-block;
+}
